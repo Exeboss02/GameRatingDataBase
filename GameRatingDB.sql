@@ -3,11 +3,14 @@
 CREATE DATABASE GameRatings;
 USE GameRatings;
 
-#-----------TABLES---------------------------------------------------------
 CREATE TABLE Meta(
 	CurrentGameIndex INT,
     CurrentStudioIndex INT
 );
+
+INSERT INTO Meta(CurrentGameIndex, CurrentStudioIndex) VALUES(0, 0);
+
+#-----------TABLES---------------------------------------------------------
 
 CREATE TABLE Users(
 	UserName VARCHAR(255),
@@ -101,4 +104,12 @@ BEGIN
 END //
 DELIMITER ;
 
-#-----------QUIERIES------------------------------
+
+DELIMITER //
+CREATE PROCEDURE GetStudioIDs(IN studioName VARCHAR(255))
+BEGIN
+	SELECT Name, StudioID FROM Studios WHERE Name = studioName;
+END //
+DELIMITER ;
+
+#-----------QUERIES------------------------------
