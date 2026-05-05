@@ -37,7 +37,7 @@ CREATE TABLE Studios(
     Country VARCHAR(255)
 );
 
-CREATE TABLE UserRanks(
+CREATE TABLE UserRatings(
 	UserName VARCHAR(255),
     GameID VARCHAR(32),
     StoryRating INT,
@@ -69,6 +69,36 @@ END //
 DELIMITER ;
 
 #-----------PROCEDURES---------------------------------------------------------------------------
+DELIMITER //
+CREATE PROCEDURE InsertUser(
+	IN userName VARCHAR(255),
+    IN gender VARCHAR(16),
+    IN age INT,
+    IN country VARCHAR(255)
+)
+BEGIN    
+	INSERT INTO Users(UserName, Gender, Age, Country)
+		VALUES (userName, gender, age, country);
+END //
+DELIMITER ;
+
+
+DELIMITER //
+CREATE PROCEDURE InsertUserRating(
+	IN userName VARCHAR(255),
+    IN gameID VARCHAR(32),
+    IN storyRating INT,
+    IN gamePlayRating INT,
+    IN visualsRating INT,
+    IN soundRating INT
+)
+BEGIN    
+	INSERT INTO UserReviews(UserName, GameID, StoryRating, GamePlayRating, VisualsRating, SoundRating)
+		VALUES (userName, gameID, storyRating, gamePlayRating, visualsRating, soundRating);
+END //
+DELIMITER ;
+
+
 DELIMITER //
 CREATE PROCEDURE InsertGame(
   IN studioID VARCHAR(32),
@@ -109,6 +139,14 @@ DELIMITER //
 CREATE PROCEDURE GetStudioIDs(IN studioName VARCHAR(255))
 BEGIN
 	SELECT Name, StudioID FROM Studios WHERE Name = studioName;
+END //
+DELIMITER ;
+
+
+DELIMITER //
+CREATE PROCEDURE GetGameIDs(IN title VARCHAR(255))
+BEGIN
+	SELECT Title, GameID FROM Games WHERE Title = title;
 END //
 DELIMITER ;
 
