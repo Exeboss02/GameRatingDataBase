@@ -1,9 +1,9 @@
 
-#-----------SETUP------------------------------
+#-----------SETUP---------------------------------------------------------
 CREATE DATABASE GameRatings;
 USE GameRatings;
 
-#-----------TABLES-----------------------------
+#-----------TABLES---------------------------------------------------------
 CREATE TABLE Meta(
 	CurrentGameIndex INT,
     CurrentStudioIndex INT
@@ -43,21 +43,29 @@ CREATE TABLE UserRanks(
     SoundRating INT
 );
 
-#-----------DATA-INSERTIONS-----------------------
+#-----------DATA-INSERTIONS-----------------------------------------------------------------
 
-#-----------TRIGGERS------------------------------
+#-----------TRIGGERS------------------------------------------------------------------------
 DELIMITER //
 CREATE TRIGGER AfterAddingGame
 AFTER INSERT ON Games
 FOR EACH ROW
 BEGIN
-    UPDATE Customers
-    SET booking_count = booking_count + 1
-    WHERE customer_id = NEW.customer_id;
+	UPDATE Meta SET Meta.CurrentGameIndex = Meta.CurrentGameIndex + 1;
 END //
 DELIMITER ;
 
-#-----------PROCEDURES----------------------------
+
+DELIMITER //
+CREATE TRIGGER AfterAddingStudio
+AFTER INSERT ON Studios
+FOR EACH ROW
+BEGIN
+	UPDATE Meta SET Meta.CurrentStudioIndex = Meta.CurrentStudioIndex + 1;
+END //
+DELIMITER ;
+
+#-----------PROCEDURES---------------------------------------------------------------------------
 DELIMITER //
 CREATE PROCEDURE InsertGame(
   IN studioID VARCHAR(32),
@@ -74,8 +82,22 @@ BEGIN
     
 	INSERT INTO Games(GameID, StudioID, Title, Platform, ReleaseYear, SoldCopies, Genre1, Genre2)
 		VALUES (CONCAT('G', currentGameIndex), studioID, title, platform, releaseYear, soldCopies, genre1, genre2);
+END //
+DELIMITER ;
 
-    UPDATE Meta SET Meta.CurrentGameIndex = Meta.CurrentGameIndex + 1;
+
+DELIMITER //
+CREATE PROCEDURE InsertStudio(
+	IN name VARCHAR(255),
+    IN nrOfEmployees INT,
+    IN country VARCHAR(255)
+)
+BEGIN
+	DECLARE currentStudioIndex INT;
+	SELECT Meta.CurrentStudioIndex INTO currentStudioIndex FROM Meta;
+    
+	INSERT INTO Studios(StudioID, Name, NrOfEmployees, Country)
+		VALUES (CONCAT('S', currentStudioIndex), name, nrOfEmployees, country);
 END //
 DELIMITER ;
 
