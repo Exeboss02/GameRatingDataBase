@@ -27,6 +27,26 @@ def Call_Procedure(connection, procedure_name, parameters):
     except Error as error:
         print("Error: ", error)
         return
+    
+    
+def Insert_User(connection, username, gender, age, country):
+    parameters = (username, gender, age, country)
+    result = Call_Procedure(connection, "InsertUser", parameters)
+
+    print("Inserted user :", username, ": successfully")
+    return result
+    
+    
+def Insert_Studio(connection, name, nrOfEmployees, country):
+    parameters = (name, nrOfEmployees, country)
+    result = Call_Procedure(connection, "InsertStudio", parameters)
+    
+    idParameters = (name)
+    idResult = Call_Procedure(connection, "GetStudioIDs", idParameters)
+    
+    #this introduces a bug where games with same name will only print the first entry of that title here, but is fine for most use cases
+    print("Inserted studio :", name, ": with StudioID: ", idResult[0][0], ": successfully")
+    return result
 
 
 def Insert_Studios_From_CSV(connection, path):
@@ -38,26 +58,25 @@ def Insert_Studios_From_CSV(connection, path):
         name = row['Name']
         nrOfEmployees = row['NrOfEmployees']
         country = row['Country']
-        
-        try:
-            parameters = (name, nrOfEmployees, country)
-            result = Call_Procedure(connection, "InsertStudio", parameters)
-            
-            idParameters = (name)
-            idResult = Call_Procedure(connection, "GetStudioIDs", idParameters)
-            
-            #this introduces a bug where games with same name will only print the first entry of that title here, but is fine for most use cases
-            print("Inserted :", name, ": with StudioID: ", idResult[0][0], ": successfully")
-            return
-        except Error as error:
-            print("Error: ", error)
-            return
+
+        result = Insert_Studio(connection, name, nrOfEmployees, country)
     return
+
+
+def Insert_Game(connection, studio_id, title, platform, release_year, sold_copies, genre1, genre2):
+    parameters = (studio_id, title, platform, release_year, sold_copies, genre1, genre2)
+    result = Call_Procedure(connection, "InsertGame", parameters)
+    
+    idParameters = (title)
+    idResult = Call_Procedure(connection, "GetGameIDs", idParameters)
+    
+    #this introduces a bug where games with same name will only print the first entry of that title here, but is fine for most use cases
+    print("Inserted game :", title, ": with GameID: ", idResult[0][0], ": successfully")
+    return result
 
 
 def Insert_Games_From_CSV(connection, path):
     cols_to_use = ['StudioID', 'Title', 'Platform', 'ReleaseYear', 'SoldCopies', 'Genre1', 'Genre2']
-    
     data = pd.read_csv(path, usecols=cols_to_use)
     
     for i, row in data.iterrows:
@@ -69,21 +88,9 @@ def Insert_Games_From_CSV(connection, path):
         genre1 = row['Genre1']
         genre2 = row['Genre2']
         
-        try:
-            parameters = (studio_id, title, platform, release_year, sold_copies, genre1, genre2)
-            result = Call_Procedure(connection, "InsertGame", parameters)
-            
-            idParameters = (title)
-            idResult = Call_Procedure(connection, "GetGameIDs", idParameters)
-            
-            #this introduces a bug where games with same name will only print the first entry of that title here, but is fine for most use cases
-            print("Inserted :", title, ": with GameID: ", idResult[0][0], ": successfully")
-            return
-        except Error as error:
-            print("Error: ", error)
-            return
+        result = Insert_Game(connection, studio_id, title, platform, release_year, sold_copies, genre1, genre2)
     return
-    
+
         
         
 def main():
