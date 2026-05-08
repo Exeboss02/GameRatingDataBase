@@ -33,7 +33,7 @@ CREATE TABLE Games(
 );
 
 CREATE TABLE Studios(
-	StudioID INT,
+	StudioID VARCHAR(32),
     Name VARCHAR(255),
     NrOfEmployees INT,
     Country VARCHAR(255)
@@ -78,9 +78,13 @@ CREATE PROCEDURE InsertUser(
     IN age INT,
     IN country VARCHAR(255)
 )
-BEGIN    
-	INSERT INTO Users(UserName, Gender, Age, Country)
-		VALUES (userName, gender, age, country);
+BEGIN
+	IF CheckUser(userName) = 1
+		THEN SELECT "Error! This user already exists";
+	ELSE
+		INSERT INTO Users(UserName, Gender, Age, Country)
+			VALUES (userName, gender, age, country);
+	END IF;
 END //
 DELIMITER ;
 
@@ -94,9 +98,13 @@ CREATE PROCEDURE InsertUserRating(
     IN visualsRating INT,
     IN soundRating INT
 )
-BEGIN    
-	INSERT INTO UserReviews(UserName, GameID, StoryRating, GamePlayRating, VisualsRating, SoundRating)
-		VALUES (userName, gameID, storyRating, gamePlayRating, visualsRating, soundRating);
+BEGIN
+	IF CheckUser(userName) = 0 OR CheckGame(gameID) = 0
+		Then SELECT "The user or gameID doesn't exist!";
+    ELSE
+    	INSERT INTO UserRatings(UserName, GameID, StoryRating, GamePlayRating, VisualsRating, SoundRating)
+			VALUES (userName, gameID, storyRating, gamePlayRating, visualsRating, soundRating);
+	END IF;
 END //
 DELIMITER ;
 
@@ -115,8 +123,12 @@ BEGIN
 	DECLARE currentGameIndex INT;
 	SELECT Meta.CurrentGameIndex INTO currentGameIndex FROM Meta;
     
-	INSERT INTO Games(GameID, StudioID, Title, Platform, ReleaseYear, SoldCopies, Genre1, Genre2)
-		VALUES (CONCAT('G', currentGameIndex), studioID, title, platform, releaseYear, soldCopies, genre1, genre2);
+	IF CheckStudio(studioID) = 0
+		THEN SELECT "Error! studioID doesn't exist";
+	ELSE		
+		INSERT INTO Games(GameID, StudioID, Title, Platform, ReleaseYear, SoldCopies, Genre1, Genre2)
+			VALUES (CONCAT('G', currentGameIndex), studioID, title, platform, releaseYear, soldCopies, genre1, genre2);
+	END IF;
 END //
 DELIMITER ;
 
@@ -137,6 +149,63 @@ END //
 DELIMITER ;
 
 
+DELIMITER $$
+CREATE FUNCTION CheckUser(userName VARCHAR(255))
+RETURNS INT
+DETERMINISTIC
+BEGIN
+	IF EXISTS (
+	SELECT UserName
+	FROM Users
+	WHERE
+		Users.UserName = userName
+    ) THEN
+        RETURN 1;
+    ELSE
+        RETURN 0;
+    END IF;
+END $$
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE FUNCTION CheckGame(gameID VARCHAR(32))
+RETURNS INT
+DETERMINISTIC
+BEGIN
+	IF EXISTS (
+	SELECT GameID
+	FROM Games
+	WHERE
+		Games.GameID = gameID
+    ) THEN
+        RETURN 1;
+    ELSE
+        RETURN 0;
+    END IF;
+END $$
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE FUNCTION CheckStudio(studioID VARCHAR(32))
+RETURNS INT
+DETERMINISTIC
+BEGIN
+	IF EXISTS (
+	SELECT StudioID
+	FROM Studios
+	WHERE
+		Studios.StudioID = studioID
+    ) THEN
+        RETURN 1;
+    ELSE
+        RETURN 0;
+    END IF;
+END $$
+DELIMITER ;
+
+
 DELIMITER //
 CREATE PROCEDURE GetStudioIDs(IN studioName VARCHAR(255))
 BEGIN
@@ -152,4 +221,16 @@ BEGIN
 END //
 DELIMITER ;
 
-#-----------QUERIES------------------------------
+#-----------QUERIES-------------------------------------------------------------------------------
+CALL InsertUser("test2", "male", 30, "Sweden");
+CALL InsertStudio("frömsoftware", 3500, "Japan");
+CALL InsertGame("S0", "Elden Bling", "Xbox, Praystation, PC", 2022, 10000000, "Action", "RPG");
+CALL InsertUserRating("test", "G0", 10, 10, 10, 10);
+SELECT * FROM UserRatings;
+
+DROP PROCEDURE InsertUserRating;
+DROP FUNCTION CheckGame;
+
+SELECT CheckUser("test");
+
+CALL InsertUserRating("test", "G1", 0, 0, 0, 0);
