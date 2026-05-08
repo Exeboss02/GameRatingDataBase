@@ -4,29 +4,61 @@ import mysql.connector
 from mysql.connector import Error
 
 def Connect_To_Data_Base(username, password):
-    connection = None
+    db = None
     try:
-        connection = mysql.connector.connect(
+        db = mysql.connector.connect(
             host="localhost",
             user=username,
-            password=password)
+            password=password,
+            database="GameRatings"
+        )
         
         print("Connection to mysql server succeeded!")
-        return connection
+        db.commit()
+        return db
     except:
         print("Connection to mysql server failed!")
         return
     
     
+def Disconnect():
+    connection = None
+    try:
+        connection = mysql.connector.close(host="localhost")
+        print("Successfully disconnected")
+        return
+    except:
+        print("Disconnect failed")
+        return
+    
+    
 def Call_Procedure(connection, procedure_name, parameters):
-    cursor = connection.cursor
+    cursor = connection.cursor()
     try:
         cursor.callproc(procedure_name, parameters)
         result = cursor.fetchall()
+        connection.commit()
         return result
     except Error as error:
         print("Error: ", error)
         return
+    
+    
+def Call_Query(connection, query):
+    cursor = connection.cursor()
+    try:
+        cursor.execute(query)
+        result = cursor.fetchall()
+        connection.commit()
+        return result
+    except Error as error:
+        print("Error: ", error)
+        return
+    
+    
+def Print_Result(dbResult):
+    for row in dbResult:
+        print(row)
     
     
 def Insert_User(connection, username, gender, age, country):
@@ -54,7 +86,7 @@ def Insert_Studios_From_CSV(connection, path):
     
     data = pd.read_csv(path, usecols=cols_to_use)
     
-    for i, row in data.iterrows:
+    for i, row in data.iterrows():
         name = row['Name']
         nrOfEmployees = row['NrOfEmployees']
         country = row['Country']
@@ -79,7 +111,7 @@ def Insert_Games_From_CSV(connection, path):
     cols_to_use = ['StudioID', 'Title', 'Platform', 'ReleaseYear', 'SoldCopies', 'Genre1', 'Genre2']
     data = pd.read_csv(path, usecols=cols_to_use)
     
-    for i, row in data.iterrows:
+    for i, row in data.iterrows():
         studio_id = row['StudioID']
         title = row['Title']
         platform = row['Platform']
@@ -94,7 +126,11 @@ def Insert_Games_From_CSV(connection, path):
         
         
 def main():
-    connection = Connect_To_Data_Base("", "")
+    db = Connect_To_Data_Base("exeboss", "*King1337!")
+    Insert_Studios_From_CSV(db, "studios.csv")
+    result = Call_Query(db, "SELECT * FROM Studios")
+    Print_Result(result)
+    
 
 if __name__ == "__main__":
     main()
