@@ -32,11 +32,14 @@ def Disconnect():
         return
     
     
-def Call_Procedure(connection, procedure_name, parameters):
+def Call_Procedure(connection, should_fetch, procedure_name, parameters):
     cursor = connection.cursor()
     try:
+        kleng = ("name", 33, "hehe")
         cursor.callproc(procedure_name, parameters)
-        result = cursor.fetchall()
+        result = None
+        if(should_fetch):
+            result = cursor.fetchall()
         connection.commit()
         return result
     except Error as error:
@@ -63,7 +66,7 @@ def Print_Result(dbResult):
     
 def Insert_User(connection, username, gender, age, country):
     parameters = (username, gender, age, country)
-    result = Call_Procedure(connection, "InsertUser", parameters)
+    result = Call_Procedure(connection, True, "InsertUser", parameters)
 
     print("Inserted user :", username, ": successfully")
     return result
@@ -71,13 +74,13 @@ def Insert_User(connection, username, gender, age, country):
     
 def Insert_Studio(connection, name, nrOfEmployees, country):
     parameters = (name, nrOfEmployees, country)
-    result = Call_Procedure(connection, "InsertStudio", parameters)
+    result = Call_Procedure(connection, True, "InsertStudio", parameters)
     
-    idParameters = (name)
-    idResult = Call_Procedure(connection, "GetStudioIDs", idParameters)
+    # idParameters = (name)
+    # idResult = Call_Procedure(connection, True, "GetStudioIDs", idParameters)
     
     #this introduces a bug where games with same name will only print the first entry of that title here, but is fine for most use cases
-    print("Inserted studio :", name, ": with StudioID: ", idResult[0][0], ": successfully")
+    print("Inserted studio :", name, ": successfully")
     return result
 
 
@@ -97,13 +100,13 @@ def Insert_Studios_From_CSV(connection, path):
 
 def Insert_Game(connection, studio_id, title, platform, release_year, sold_copies, genre1, genre2):
     parameters = (studio_id, title, platform, release_year, sold_copies, genre1, genre2)
-    result = Call_Procedure(connection, "InsertGame", parameters)
+    result = Call_Procedure(connection, True, "InsertGame", parameters)
     
-    idParameters = (title)
-    idResult = Call_Procedure(connection, "GetGameIDs", idParameters)
+    # idParameters = (title)
+    # idResult = Call_Procedure(connection, True, "GetGameIDs", idParameters)
     
     #this introduces a bug where games with same name will only print the first entry of that title here, but is fine for most use cases
-    print("Inserted game :", title, ": with GameID: ", idResult[0][0], ": successfully")
+    print("Inserted game :", title, ": successfully")
     return result
 
 
@@ -123,13 +126,47 @@ def Insert_Games_From_CSV(connection, path):
         result = Insert_Game(connection, studio_id, title, platform, release_year, sold_copies, genre1, genre2)
     return
 
-        
-        
-def main():
+
+def Re_Initialize():
     db = Connect_To_Data_Base("exeboss", "*King1337!")
+    
+    Insert_User(db, "xxxFredxxx", "Female", 31, "USA")
+    Insert_User(db, "Bjorn", "Male", 19, "Norway")
+    Insert_User(db, "AndrewScandrew", "Male", 25, "Sweden")
+    Insert_User(db, "Landso", "Female", 21, "Australia")
+    
     Insert_Studios_From_CSV(db, "studios.csv")
-    result = Call_Query(db, "SELECT * FROM Studios")
-    Print_Result(result)
+    Insert_Games_From_CSV(db, "games.csv")
+    
+    result0 = Call_Query(db, "SELECT * FROM Users")
+    result1 = Call_Query(db, "SELECT * FROM Studios")
+    result2 = Call_Query(db, "SELECT * FROM Games")
+    print("\n--------------USERS----------------")
+    Print_Result(result0)
+    print("\n--------------STUDIOS----------------")
+    Print_Result(result1)
+    print("\n--------------GAMES----------------")
+    Print_Result(result2)
+    
+    print("\n--------------NR-OF-GAMES----------------")
+    result4 = Call_Query(db, "SELECT COUNT(Games.GameID) FROM Games")
+    print("nr of games:")
+    Print_Result(result4)
+    
+    print("\n--------------AVG-GAMEPLAY-SCORE-GROUPED-BY-GAME----------------")
+    result5 = Call_Query(db, "SELECT AVG(GamePlayRating) FROM UserRatings GROUP BY UserRatings.GameID")
+    print("nr of games:")
+    Print_Result(result5)
+    
+    return db
+
+        
+        
+def main():    
+    db = Re_Initialize()
+    # db = Connect_To_Data_Base("exeboss", "*King1337!")
+    # result = Call_Query(db, "SELECT * FROM Games WHERE Games.StudioID = 'S2'")
+    # Print_Result(result)
     
 
 if __name__ == "__main__":

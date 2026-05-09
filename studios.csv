@@ -1,11 +1,11 @@
 StudioID,Name,NrOfEmployees,Country
-1,FromSoftware,1000,Japan
-2,Bungie,1000,USA
-3,Infinite Fall,5,USA
-4,Toby Fox,1,USA
-5,Crytek,500,Germany
-6,Valve,400,USA
-7,Psyonix,200,USA
-8,Nintendo,5000,Japan
-9,Team Cherry,3,Australia
-10,Finji,10,USA
+S1,FromSoftware,1000,Japan
+S2,Bungie,1000,USA
+S3,Infinite Fall,5,USA
+S4,Toby Fox,1,USA
+S5,Crytek,500,Germany
+S6,Valve,400,USA
+S7,Psyonix,200,USA
+S8,Nintendo,5000,Japan
+S9,Team Cherry,3,Australia
+S10,Finji,10,USA

@@ -135,9 +135,9 @@ DELIMITER ;
 
 DELIMITER //
 CREATE PROCEDURE InsertStudio(
-	IN name VARCHAR(255),
-    IN nrOfEmployees INT,
-    IN country VARCHAR(255)
+	name VARCHAR(255),
+    nrOfEmployees INT,
+    country VARCHAR(255)
 )
 BEGIN
 	DECLARE currentStudioIndex INT;
@@ -226,11 +226,13 @@ CALL InsertUser("test2", "male", 30, "Sweden");
 CALL InsertStudio("frömsoftware", 3500, "Japan");
 CALL InsertGame("S0", "Elden Bling", "Xbox, Praystation, PC", 2022, 10000000, "Action", "RPG");
 CALL InsertUserRating("test", "G0", 10, 10, 10, 10);
-SELECT * FROM UserRatings;
+SELECT * FROM Games;
 
-DROP PROCEDURE InsertUserRating;
+DROP PROCEDURE InsertStudio;
 DROP FUNCTION CheckGame;
 
 SELECT CheckUser("test");
 
 CALL InsertUserRating("test", "G1", 0, 0, 0, 0);
+
+SELECT * FROM Games WHERE StudioID = 'S1';
