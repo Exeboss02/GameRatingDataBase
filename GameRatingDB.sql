@@ -220,19 +220,3 @@ BEGIN
 	SELECT Title, GameID FROM Games WHERE Title = title;
 END //
 DELIMITER ;
-
-#-----------QUERIES-------------------------------------------------------------------------------
-CALL InsertUser("test2", "male", 30, "Sweden");
-CALL InsertStudio("frömsoftware", 3500, "Japan");
-CALL InsertGame("S0", "Elden Bling", "Xbox, Praystation, PC", 2022, 10000000, "Action", "RPG");
-CALL InsertUserRating("test", "G0", 10, 10, 10, 10);
-SELECT * FROM Games;
-
-DROP PROCEDURE InsertStudio;
-DROP FUNCTION CheckGame;
-
-SELECT CheckUser("test");
-
-CALL InsertUserRating("test", "G1", 0, 0, 0, 0);
-
-SELECT * FROM Games WHERE StudioID = 'S1';

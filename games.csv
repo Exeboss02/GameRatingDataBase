@@ -1,18 +1,18 @@
 GameID,StudioID,Title,Platform,ReleaseYear,SoldCopies,Genre1,Genre2
-G1,S1,Dark Souls,"PC, PlayStation 3, Xbox 360",2011,5000000,Action,RPG
-G2,S1,Dark Souls II,"PC, PlayStation 3, Xbox 360",2014,2500000,Action,RPG
-G3,S1,Dark Souls III,"PC, PlayStation 4, Xbox One",2016,10000000,Action,RPG
-G4,S2,Halo 3,Xbox 360,2007,14500000,Shooter,Action
-G5,S2,Halo Infinite,"Xbox Series X/S, PC",2021,20000000,Shooter,Action
-G6,S1,Elden Ring,"PC, PlayStation 4/5, Xbox One/Series X/S",2022,25000000,Action,RPG
-G7,S3,Night in the Woods,"PC, PlayStation 4, Xbox One, Nintendo Switch",2017,500000,Adventure,Indie
-G8,S4,Deltarune,"PC, Nintendo Switch, PlayStation 4",2018,1000000,RPG,Adventure
-G9,S4,Undertale,"PC, PlayStation 4, Xbox One, Nintendo Switch",2015,5000000,RPG,Indie
-G10,S5,Hunt: Showdown,"PC, PlayStation 4, Xbox One",2019,2000000,Shooter,Survival
-G11,S6,Counter-Strike 2,PC,2023,15000000,Shooter,Competitive
-G12,S7,Rocket League,"PC, PlayStation 4, Xbox One, Nintendo Switch",2015,100000000,Sports,Racing
-G13,S8,Super Mario Galaxy,Wii,2007,12800000,Platformer,Adventure
-G14,S8,Super Mario Galaxy 2,Wii,2010,7500000,Platformer,Adventure
-G15,S9,Hollow Knight,"PC, PlayStation 4, Xbox One, Nintendo Switch",2017,3000000,Metroidvania,Action
-G16,S1,Silksong,"PC, Nintendo Switch, PlayStation 4/5, Xbox One/Series X/S",,0,Metroidvania,Action
-G17,S10,Tunic,"PC, Xbox One/Series X/S, PlayStation 4/5, Nintendo Switch",2022,1000000,Adventure,Puzzle
+G1,S0,Dark Souls,"PC, PlayStation 3, Xbox 360",2011,5000000,Action,RPG
+G2,S0,Dark Souls II,"PC, PlayStation 3, Xbox 360",2014,2500000,Action,RPG
+G3,S0,Dark Souls III,"PC, PlayStation 4, Xbox One",2016,10000000,Action,RPG
+G4,S1,Halo 3,Xbox 360,2007,14500000,Shooter,Action
+G5,S1,Halo Infinite,"Xbox Series X/S, PC",2021,20000000,Shooter,Action
+G6,S0,Elden Ring,"PC, PlayStation 4/5, Xbox One/Series X/S",2022,25000000,Action,RPG
+G7,S2,Night in the Woods,"PC, PlayStation 4, Xbox One, Nintendo Switch",2017,500000,Adventure,Indie
+G8,S3,Deltarune,"PC, Nintendo Switch, PlayStation 4",2018,1000000,RPG,Adventure
+G9,S3,Undertale,"PC, PlayStation 4, Xbox One, Nintendo Switch",2015,5000000,RPG,Indie
+G10,S4,Hunt: Showdown,"PC, PlayStation 4, Xbox One",2019,2000000,Shooter,Survival
+G11,S5,Counter-Strike 2,PC,2023,15000000,Shooter,Competitive
+G12,S6,Rocket League,"PC, PlayStation 4, Xbox One, Nintendo Switch",2015,100000000,Sports,Racing
+G13,S7,Super Mario Galaxy,Wii,2007,12800000,Platformer,Adventure
+G14,S7,Super Mario Galaxy 2,Wii,2010,7500000,Platformer,Adventure
+G15,S8,Hollow Knight,"PC, PlayStation 4, Xbox One, Nintendo Switch",2017,3000000,Metroidvania,Action
+G16,S8,Silksong,"PC, Nintendo Switch, PlayStation 4/5, Xbox One/Series X/S",,0,Metroidvania,Action
+G17,S9,Tunic,"PC, Xbox One/Series X/S, PlayStation 4/5, Nintendo Switch",2022,1000000,Adventure,Puzzle
