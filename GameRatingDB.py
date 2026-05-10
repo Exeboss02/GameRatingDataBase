@@ -144,7 +144,7 @@ def Games_By_Studio(db, studio_id):
     
 
 def Re_Initialize():
-    db = Connect_To_Data_Base("", "")
+    db = Connect_To_Data_Base("exeboss", "*King1337!")
     
     Insert_User(db, "xxxFredxxx", "Female", 31, "USA")
     Insert_User(db, "Bjorn", "Male", 19, "Norway")
