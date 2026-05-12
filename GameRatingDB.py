@@ -117,8 +117,8 @@ def Insert_Studios_From_CSV(connection, path):
     return
 
 
-def Insert_Game(connection, studio_id, title, platform, release_year, sold_copies, genre1, genre2):
-    parameters = (studio_id, title, platform, release_year, sold_copies, genre1, genre2)
+def Insert_Game(connection, studio_id, title, platform, release_year, sold_copies, genre):
+    parameters = (studio_id, title, platform, release_year, sold_copies, genre)
     result = Call_Procedure(connection, True, "InsertGame", parameters)
     
     # idParameters = (title)
@@ -139,10 +139,10 @@ def Insert_Games_From_CSV(connection, path):
         platform = row['Platform']
         release_year = row['ReleaseYear']
         sold_copies = row['SoldCopies']
-        genre1 = row['Genre1']
-        genre2 = row['Genre2']
+        genre = row['Genre1']
+        genre2 = row['Genre2'] #not used anymore
         
-        result = Insert_Game(connection, studio_id, title, platform, release_year, sold_copies, genre1, genre2)
+        result = Insert_Game(connection, studio_id, title, platform, release_year, sold_copies, genre)
     return
 
 
@@ -293,7 +293,6 @@ def main():
         elif(command == "Call_Query" or command == "call-query"):
             print("----------------------------CALL-QUERY--------------------------------------------")
             query = input("    enter query(with correct mysql syntax): ")
-            print("query: ", query)
             result = Call_Query(db, query)
             Print_Result(result)
             print("")
@@ -306,7 +305,20 @@ def main():
         elif(command == "Examples" or command == "examples" or command == "Commands" or command == "commands"):
             print("----------------------------EXAMPLES--------------------------------------------")
             print("exit: exits application")
-            print("exit: exits application")
+            print("re-initialize: makes basic inserts to database")
+            print("delete-data-base")
+            print("call-query: performs specified query on the database")
+            print("insert-user")
+            print("insert-user-rating")
+            print("insert-studios-from-csv")
+            print("insert-studio")
+            print("insert-games-from-csv")
+            print("insert-game")
+            print("get-games-by-studio: returns a list of games that the specified studio has made")
+            print("")
+            
+            
+            
 
 if __name__ == "__main__":
     main()

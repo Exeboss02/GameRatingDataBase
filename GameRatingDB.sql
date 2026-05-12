@@ -28,8 +28,7 @@ CREATE TABLE Games(
     Platform VARCHAR(255),
     ReleaseYear INT,
     SoldCopies INT,
-    Genre1 VARCHAR(32),
-    Genre2 VARCHAR(32)
+    Genre VARCHAR(32)
 );
 
 CREATE TABLE Studios(
@@ -116,8 +115,7 @@ CREATE PROCEDURE InsertGame(
   IN platform VARCHAR(255),
   IN releaseYear INT,
   IN soldCopies INT,
-  IN genre1 VARCHAR(32),
-  IN genre2 VARCHAR(32)
+  IN genre VARCHAR(32)
 )
 BEGIN
 	DECLARE currentGameIndex INT;
@@ -126,8 +124,8 @@ BEGIN
 	IF CheckStudio(studioID) = 0
 		THEN SELECT "Error! studioID doesn't exist";
 	ELSE		
-		INSERT INTO Games(GameID, StudioID, Title, Platform, ReleaseYear, SoldCopies, Genre1, Genre2)
-			VALUES (CONCAT('G', currentGameIndex), studioID, title, platform, releaseYear, soldCopies, genre1, genre2);
+		INSERT INTO Games(GameID, StudioID, Title, Platform, ReleaseYear, SoldCopies, Genre)
+			VALUES (CONCAT('G', currentGameIndex), studioID, title, platform, releaseYear, soldCopies, genre);
 	END IF;
 END //
 DELIMITER ;
