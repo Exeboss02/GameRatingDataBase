@@ -3,6 +3,15 @@ import numpy as np
 import mysql.connector
 from mysql.connector import Error
 
+def Delete_Data_Base(db):
+    answer = input("    are you sure(y/n)")
+    if(answer == "y" or answer == "Y" or answer == "yes" or answer == "Yes"):
+        Call_Query(db, "DROP DATABASE GameRatings;")
+        print("    database was successfully deleted")
+    else:
+        print("    deletion canceled, nothing changed")
+        return
+
 def Connect_To_Data_Base(username, password):
     db = None
     try:
@@ -21,10 +30,9 @@ def Connect_To_Data_Base(username, password):
         return
     
     
-def Disconnect():
-    connection = None
+def Disconnect(db):
     try:
-        connection = mysql.connector.close(host="localhost")
+        connection = db.close(host="localhost")
         print("Successfully disconnected")
         return
     except:
@@ -138,14 +146,12 @@ def Insert_Games_From_CSV(connection, path):
     return
 
 
-def Games_By_Studio(db, studio_id):
+def Get_Games_By_Studio(db, studio_id):
     result = Call_Query(db, "SELECT Games.*, Studios.Name FROM Games INNER JOIN Studios ON Games.StudioID = Studios.StudioID WHERE Studios.StudioID = '" + studio_id + "';")
     Print_Result(result)
     
 
-def Re_Initialize():
-    db = Connect_To_Data_Base("exeboss", "*King1337!")
-    
+def Re_Initialize(db):
     Insert_User(db, "xxxFredxxx", "Female", 31, "USA")
     Insert_User(db, "Bjorn", "Male", 19, "Norway")
     Insert_User(db, "AndrewScandrew", "Male", 25, "Sweden")
@@ -205,7 +211,7 @@ def Re_Initialize():
     Print_Result(result6)
     
     print("\n--------------EVERY-FROMSOFTWARE-GAME----------------")
-    Games_By_Studio(db, "S0")
+    Get_Games_By_Studio(db, "S0")
     
     
     #GamesByStudio uses both JOIN and 2 tables
@@ -214,10 +220,93 @@ def Re_Initialize():
     return db
 
         
-        
 def main():
-    db = Re_Initialize()
+    db = Connect_To_Data_Base("exeboss", "*King1337!")
     
+    while True:
+        command = input("enter command: ")
+        
+        if(command == "exit" or command == "quit" or command == "e" or command == "q" or command == "off"):
+            Disconnect(db)
+            quit()
+            
+        elif(command == "Re_Initialize" or command == "re-initialize"):
+            print("----------------------------RE-INITIALIZE--------------------------------------------")
+            Re_Initialize(db)
+            print("done\n")
+            
+        elif(command == "Insert_User" or command == "insert-user"):
+            print("----------------------------INSERT-USER--------------------------------------------")
+            username = input("    enter username: ")
+            gender = input("    enter gender: ")
+            age = input("    enter age: ")
+            country = input("    enter country: ")
+            Insert_User(db, username, gender, age, country)
+            print("")
+            
+        elif(command == "Insert_User_Rating" or command == "insert-user-rating"):
+            print("----------------------------INSERT-USER-RATING-------------------------------------------")
+            username = input("    enter username: ")
+            game_id = input("    enter game_id: ")
+            story = input("    enter story score: ")
+            game_play = input("    enter game play score: ")
+            visuals = input("    enter visuals score: ")
+            sound = input("    enter sound score: ")
+            Insert_User_Rating(db, username, game_id, story, game_play, visuals, sound)
+            print("")
+            
+        elif(command == "Insert_Studio" or command == "insert-studio"):
+            print("----------------------------INSERT-STUDIO--------------------------------------------")
+            name = input("    enter studio name: ")
+            nrOfEmployees = input("    enter nrOfEmployees: ")
+            country = input("    enter country: ")
+            Insert_Studio(db, name, nrOfEmployees, country)
+            print("")
+             
+        elif(command == "Insert_Game" or command == "insert-game"):
+            print("----------------------------INSERT-GAME--------------------------------------------")
+            studio_id = input("    enter username: ")
+            title = input("    enter gender: ")
+            platform = input("    enter age: ")
+            release_year = input("    enter country: ")
+            sold_copies = input("    enter nrOfSoldCopies: ")
+            genre = input("    enter genre: ")
+            Insert_Game(db, studio_id, title, platform, release_year, sold_copies, genre, genre)
+            print("")
+            
+        elif(command == "Insert_Studios_From_CSV" or command == "insert-studios-from-csv"):
+            print("----------------------------INSERT-STUDIOS-FROM-CSV------------------------------------------")
+            path = input("    enter studios csv filepath: ")
+            Insert_Studios_From_CSV(db, path)
+            
+        elif(command == "Insert_Games_From_CSV" or command == "insert-games-from-csv"):
+            print("----------------------------INSERT-STUDIOS-FROM-CSV------------------------------------------")
+            path = input("    enter games csv filepath: ")
+            Insert_Games_From_CSV(db, path)
+            
+        elif(command == "Get_Games_By_Studio" or command == "get-games-by-studio"):
+            print("----------------------------GET-GAMES-BY-STUDIO-----------------------------------------")
+            studio_id = input("    studio_id: ")
+            Get_Games_By_Studio(db, studio_id)
+            print("")
+            
+        elif(command == "Call_Query" or command == "call-query"):
+            print("----------------------------CALL-QUERY--------------------------------------------")
+            query = input("    enter query(with correct mysql syntax): ")
+            print("query: ", query)
+            result = Call_Query(db, query)
+            Print_Result(result)
+            print("")
+            
+        elif(command == "Delete_Data_Base" or command == "delete-data-base"):
+            print("----------------------------DELETE-DATA-BASE--------------------------------------------")
+            Delete_Data_Base(db)
+            print("")
+            
+        elif(command == "Examples" or command == "examples" or command == "Commands" or command == "commands"):
+            print("----------------------------EXAMPLES--------------------------------------------")
+            print("exit: exits application")
+            print("exit: exits application")
 
 if __name__ == "__main__":
     main()
