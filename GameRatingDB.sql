@@ -223,15 +223,17 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE GetAvgRatingsForGame(IN gameID VARCHAR(64))
 BEGIN
-	SELECT Games.title, AVG(StoryRating) AS avgStoryScore, AVG(GamePlay) AS avgGamePlayScore,
-		AVG(VisualsRating) AS avgVisualsScore, AVG(SoundRating) AS avgSoundScore
-		FROM UserRatings INNER JOIN Games
-		WHERE Games.GameID = gameID;
+	SELECT Games.Title,
+		AVG(StoryRating) AS avgStoryScore,
+        AVG(GamePlayRating) AS avgGamePlayScore,
+		AVG(VisualsRating) AS avgVisualsScore,
+        AVG(SoundRating) AS avgSoundScore
+	FROM
+		UserRatings
+	INNER JOIN
+		Games ON Games.GameID = UserRatings.GameID
+	WHERE
+		Games.GameID = gameID
+	GROUP BY Games.Title;
 END //
 DELIMITER ;
-
-
-SELECT Games.title, AVG(StoryRating) AS avgStoryScore, AVG(GamePlay) AS avgGamePlayScore,
-	AVG(VisualsRating) AS avgVisualsScore, AVG(SoundRating) AS avgSoundScore
-	FROM UserRatings INNER JOIN Games
-	WHERE Games.GameID = "G0";

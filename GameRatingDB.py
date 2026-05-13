@@ -43,11 +43,11 @@ def Disconnect(db):
 def Call_Procedure(connection, should_fetch, procedure_name, parameters):
     cursor = connection.cursor()
     try:
-        kleng = ("name", 33, "hehe")
         cursor.callproc(procedure_name, parameters)
         result = None
         if(should_fetch):
-            result = cursor.fetchall()
+            for stored_result in cursor.stored_results():
+                result = stored_result.fetchall()
         connection.commit()
         return result
     except Error as error:
@@ -152,7 +152,22 @@ def Get_Games_By_Studio(db, studio_id):
     
     
 def Get_Avg_Ratings_For_Game(db, game_id):
-    result = Call_Query(db, "SELECT AVG")
+    query = """
+    SELECT Games.Title,
+		AVG(StoryRating) AS avgStoryScore,
+        AVG(GamePlayRating) AS avgGamePlayScore,
+		AVG(VisualsRating) AS avgVisualsScore,
+        AVG(SoundRating) AS avgSoundScore
+	FROM
+		UserRatings
+	INNER JOIN
+		Games ON Games.GameID = UserRatings.GameID
+	WHERE
+		Games.GameID = '""" + game_id + """'
+	GROUP BY Games.Title;"""
+    
+    result = Call_Query(db, query)
+    Print_Result(result)
     
 
 def Re_Initialize(db):
@@ -306,6 +321,12 @@ def main():
             Delete_Data_Base(db)
             print("")
             
+        elif(command == "Get_Avg_Ratings_For_Game" or command == "get-avg-ratings-for-game"):
+            print("----------------------------GET-AVG-RATINGS-FOR-GAME--------------------------------------------")
+            game_id = input("    enter game_id: ")
+            Get_Avg_Ratings_For_Game(db, game_id)
+            print("")
+            
         elif(command == "Examples" or command == "examples" or command == "Commands" or command == "commands"):
             print("----------------------------EXAMPLES--------------------------------------------")
             print("exit: exits application")
@@ -319,6 +340,7 @@ def main():
             print("insert-games-from-csv")
             print("insert-game")
             print("get-games-by-studio: returns a list of games that the specified studio has made")
+            print("get-avg-ratings-for-game: displays the avarage rataings for the specified game")
             print("")
             
             
