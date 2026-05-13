@@ -4,16 +4,18 @@ Query 1 is a basic INSERT - spec explicitly says don't use these as one of your 
 
 Query 2 is a trivial single-column PK lookup - weak choice for "interesting query"
 
-No SQL schema / CREATE TABLE section (Task 3 missing)
-
-Queries shown as screenshots - should be text/code blocks (not copyable, not accessible)
-
-Missing function or a procedure
-
 DONE - main() always re-initializes the DB on every run - no setup/run separation, will duplicate or error on repeated runs
 
 DONE - Genre1/Genre2 violates normalization - acknowledged but not justified
 
+--------ONLY TEXT-------------------
+
 No Discussion/Resources section, no references
 
 Query explanations too thin (2–3 sentences, no motivation or call sites)
+
+Missing function or a procedure
+
+Queries shown as screenshots - should be text/code blocks (not copyable, not accessible)
+
+No SQL schema / CREATE TABLE section (Task 3 missing)

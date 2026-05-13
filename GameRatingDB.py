@@ -150,6 +150,10 @@ def Get_Games_By_Studio(db, studio_id):
     result = Call_Query(db, "SELECT Games.*, Studios.Name FROM Games INNER JOIN Studios ON Games.StudioID = Studios.StudioID WHERE Studios.StudioID = '" + studio_id + "';")
     Print_Result(result)
     
+    
+def Get_Avg_Ratings_For_Game(db, game_id):
+    result = Call_Query(db, "SELECT AVG")
+    
 
 def Re_Initialize(db):
     Insert_User(db, "xxxFredxxx", "Female", 31, "USA")
