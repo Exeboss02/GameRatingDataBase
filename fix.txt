@@ -1,4 +1,4 @@
-Only 1 multirelation query - spec requires ≥2 with JOIN
+DONE - Only 1 multirelation query - spec requires ≥2 with JOIN
 
 DONE - main() always re-initializes the DB on every run - no setup/run separation, will duplicate or error on repeated runs
 
